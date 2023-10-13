@@ -4,6 +4,7 @@ from time import sleep
 import Branch
 import multiprocessing
 import Customer
+import consts
 
 def read_input_to_dict(filename):
     with open(filename) as file:
@@ -25,12 +26,12 @@ def execute_customer_processes(id, events):
     print("Processing ", id, events)
     cust_obj = cust_obj = Customer.Customer(id=id, events=events)
     output_obj = cust_obj.executeEvents()
-    with open("outputs/output.txt", 'a') as file:
+    with open(consts.OUTPUT_FILE, 'a') as file:
         json.dump(output_obj, file)
         file.write('\n')
 
 if __name__ == "__main__":
-    customer_list, branch_list = parse_input_tolists('tests/dummy_input.json')
+    customer_list, branch_list = parse_input_tolists(consts.INPUT_FILE)
 
     print("Count of lists c ; {}, b : {}".format(customer_list, branch_list) )
 
@@ -54,21 +55,13 @@ if __name__ == "__main__":
         # print("Starting branch")
         cust_process.start()
         cust_process.join()
-    '''
-    for customers in customer_list:
-        create_customer_processes(customers['id'], customers['events'])
-    '''
 
     
     #Initiating server termination
     print("\nTerminating branch processes")
     for proc in branch_processes:
-        print("herere")
+        # print("herere")
         proc.terminate()
     
     #Create output file
     print("\nOutput written to output.txt file")
-    #Create servers
-    # for branch in branch_list:
-    #     # print(branch)
-    #     Branch.serve(branch['id'], branch['balance'])
