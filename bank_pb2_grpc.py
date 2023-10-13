@@ -14,65 +14,17 @@ class BankStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.BranchQuery = channel.unary_unary(
-                '/bank.Bank/BranchQuery',
-                request_serializer=bank__pb2.CustomerQueryRequest.SerializeToString,
-                response_deserializer=bank__pb2.CustomerQueryResponse.FromString,
-                )
-        self.BranchWithdraw = channel.unary_unary(
-                '/bank.Bank/BranchWithdraw',
-                request_serializer=bank__pb2.CustomerTransactRequest.SerializeToString,
-                response_deserializer=bank__pb2.NotificaionResponse.FromString,
-                )
-        self.BranchDeposit = channel.unary_unary(
-                '/bank.Bank/BranchDeposit',
-                request_serializer=bank__pb2.CustomerTransactRequest.SerializeToString,
-                response_deserializer=bank__pb2.NotificaionResponse.FromString,
-                )
-        self.BranchPropogateWithdraw = channel.unary_unary(
-                '/bank.Bank/BranchPropogateWithdraw',
-                request_serializer=bank__pb2.CustomerTransactRequest.SerializeToString,
-                response_deserializer=bank__pb2.NotificaionResponse.FromString,
-                )
-        self.BranchPropogateDeposit = channel.unary_unary(
-                '/bank.Bank/BranchPropogateDeposit',
-                request_serializer=bank__pb2.CustomerTransactRequest.SerializeToString,
-                response_deserializer=bank__pb2.NotificaionResponse.FromString,
+        self.MsgDelivery = channel.unary_unary(
+                '/bank.Bank/MsgDelivery',
+                request_serializer=bank__pb2.BankRequest.SerializeToString,
+                response_deserializer=bank__pb2.BankResponse.FromString,
                 )
 
 
 class BankServicer(object):
     """Missing associated documentation comment in .proto file."""
 
-    def BranchQuery(self, request, context):
-        """Unary
-        """
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def BranchWithdraw(self, request, context):
-        """Unary
-        """
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def BranchDeposit(self, request, context):
-        """Unary
-        """
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def BranchPropogateWithdraw(self, request, context):
-        """Unary
-        """
-        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-        context.set_details('Method not implemented!')
-        raise NotImplementedError('Method not implemented!')
-
-    def BranchPropogateDeposit(self, request, context):
+    def MsgDelivery(self, request, context):
         """Unary
         """
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -82,30 +34,10 @@ class BankServicer(object):
 
 def add_BankServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'BranchQuery': grpc.unary_unary_rpc_method_handler(
-                    servicer.BranchQuery,
-                    request_deserializer=bank__pb2.CustomerQueryRequest.FromString,
-                    response_serializer=bank__pb2.CustomerQueryResponse.SerializeToString,
-            ),
-            'BranchWithdraw': grpc.unary_unary_rpc_method_handler(
-                    servicer.BranchWithdraw,
-                    request_deserializer=bank__pb2.CustomerTransactRequest.FromString,
-                    response_serializer=bank__pb2.NotificaionResponse.SerializeToString,
-            ),
-            'BranchDeposit': grpc.unary_unary_rpc_method_handler(
-                    servicer.BranchDeposit,
-                    request_deserializer=bank__pb2.CustomerTransactRequest.FromString,
-                    response_serializer=bank__pb2.NotificaionResponse.SerializeToString,
-            ),
-            'BranchPropogateWithdraw': grpc.unary_unary_rpc_method_handler(
-                    servicer.BranchPropogateWithdraw,
-                    request_deserializer=bank__pb2.CustomerTransactRequest.FromString,
-                    response_serializer=bank__pb2.NotificaionResponse.SerializeToString,
-            ),
-            'BranchPropogateDeposit': grpc.unary_unary_rpc_method_handler(
-                    servicer.BranchPropogateDeposit,
-                    request_deserializer=bank__pb2.CustomerTransactRequest.FromString,
-                    response_serializer=bank__pb2.NotificaionResponse.SerializeToString,
+            'MsgDelivery': grpc.unary_unary_rpc_method_handler(
+                    servicer.MsgDelivery,
+                    request_deserializer=bank__pb2.BankRequest.FromString,
+                    response_serializer=bank__pb2.BankResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -118,7 +50,7 @@ class Bank(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
-    def BranchQuery(request,
+    def MsgDelivery(request,
             target,
             options=(),
             channel_credentials=None,
@@ -128,76 +60,8 @@ class Bank(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/bank.Bank/BranchQuery',
-            bank__pb2.CustomerQueryRequest.SerializeToString,
-            bank__pb2.CustomerQueryResponse.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
-    def BranchWithdraw(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/bank.Bank/BranchWithdraw',
-            bank__pb2.CustomerTransactRequest.SerializeToString,
-            bank__pb2.NotificaionResponse.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
-    def BranchDeposit(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/bank.Bank/BranchDeposit',
-            bank__pb2.CustomerTransactRequest.SerializeToString,
-            bank__pb2.NotificaionResponse.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
-    def BranchPropogateWithdraw(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/bank.Bank/BranchPropogateWithdraw',
-            bank__pb2.CustomerTransactRequest.SerializeToString,
-            bank__pb2.NotificaionResponse.FromString,
-            options, channel_credentials,
-            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
-
-    @staticmethod
-    def BranchPropogateDeposit(request,
-            target,
-            options=(),
-            channel_credentials=None,
-            call_credentials=None,
-            insecure=False,
-            compression=None,
-            wait_for_ready=None,
-            timeout=None,
-            metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/bank.Bank/BranchPropogateDeposit',
-            bank__pb2.CustomerTransactRequest.SerializeToString,
-            bank__pb2.NotificaionResponse.FromString,
+        return grpc.experimental.unary_unary(request, target, '/bank.Bank/MsgDelivery',
+            bank__pb2.BankRequest.SerializeToString,
+            bank__pb2.BankResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

@@ -13,21 +13,17 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\nbank.proto\x12\x04\x62\x61nk\"\"\n\x14\x43ustomerQueryRequest\x12\n\n\x02id\x18\x01 \x01(\x05\"4\n\x17\x43ustomerTransactRequest\x12\n\n\x02id\x18\x01 \x01(\x05\x12\r\n\x05money\x18\x02 \x01(\x05\"\"\n\x13NotificaionResponse\x12\x0b\n\x03msg\x18\x01 \x01(\t\"$\n\x15\x43ustomerQueryResponse\x12\x0b\n\x03msg\x18\x01 \x01(\x05\x32\x8e\x03\n\x04\x42\x61nk\x12\x46\n\x0b\x42ranchQuery\x12\x1a.bank.CustomerQueryRequest\x1a\x1b.bank.CustomerQueryResponse\x12J\n\x0e\x42ranchWithdraw\x12\x1d.bank.CustomerTransactRequest\x1a\x19.bank.NotificaionResponse\x12I\n\rBranchDeposit\x12\x1d.bank.CustomerTransactRequest\x1a\x19.bank.NotificaionResponse\x12S\n\x17\x42ranchPropogateWithdraw\x12\x1d.bank.CustomerTransactRequest\x1a\x19.bank.NotificaionResponse\x12R\n\x16\x42ranchPropogateDeposit\x12\x1d.bank.CustomerTransactRequest\x1a\x19.bank.NotificaionResponseb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\nbank.proto\x12\x04\x62\x61nk\"Z\n\x0b\x42\x61nkRequest\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x0c\n\x04type\x18\x02 \x01(\t\x12\x11\n\tinterface\x18\x03 \x01(\t\x12\r\n\x05money\x18\x04 \x01(\x05\x12\x0f\n\x07\x62\x61lance\x18\x05 \x01(\x05\"B\n\x0c\x42\x61nkResponse\x12\x11\n\tinterface\x18\x02 \x01(\t\x12\x0e\n\x06result\x18\x03 \x01(\t\x12\x0f\n\x07\x62\x61lance\x18\x04 \x01(\x05\x32<\n\x04\x42\x61nk\x12\x34\n\x0bMsgDelivery\x12\x11.bank.BankRequest\x1a\x12.bank.BankResponseb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'bank_pb2', _globals)
 if _descriptor._USE_C_DESCRIPTORS == False:
   DESCRIPTOR._options = None
-  _globals['_CUSTOMERQUERYREQUEST']._serialized_start=20
-  _globals['_CUSTOMERQUERYREQUEST']._serialized_end=54
-  _globals['_CUSTOMERTRANSACTREQUEST']._serialized_start=56
-  _globals['_CUSTOMERTRANSACTREQUEST']._serialized_end=108
-  _globals['_NOTIFICAIONRESPONSE']._serialized_start=110
-  _globals['_NOTIFICAIONRESPONSE']._serialized_end=144
-  _globals['_CUSTOMERQUERYRESPONSE']._serialized_start=146
-  _globals['_CUSTOMERQUERYRESPONSE']._serialized_end=182
-  _globals['_BANK']._serialized_start=185
-  _globals['_BANK']._serialized_end=583
+  _globals['_BANKREQUEST']._serialized_start=20
+  _globals['_BANKREQUEST']._serialized_end=110
+  _globals['_BANKRESPONSE']._serialized_start=112
+  _globals['_BANKRESPONSE']._serialized_end=178
+  _globals['_BANK']._serialized_start=180
+  _globals['_BANK']._serialized_end=240
 # @@protoc_insertion_point(module_scope)
