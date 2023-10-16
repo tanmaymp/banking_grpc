@@ -30,6 +30,9 @@ class Branch(bank_pb2_grpc.BankServicer):
 
     # TODO: students are expected to process requests from both Client and Branch
     def MsgDelivery(self,request, context):
+        '''
+        recieves requests from customer/branches and executes the interfaces accordingly and retunrs a response
+        '''
         response = bank_pb2.BankResponse()
         response.interface = request.interface
         if request.type == 'customer':
@@ -57,9 +60,15 @@ class Branch(bank_pb2_grpc.BankServicer):
         return response
 
     def BranchQuery(self):
+        '''
+        Query interface
+        '''
         return self.balance
 
     def BranchDeposit(self, money):
+        '''
+        Deposit interface
+        '''
         try:
             self.balance = int(self.balance) + int(money)
             return 'success'
@@ -67,6 +76,9 @@ class Branch(bank_pb2_grpc.BankServicer):
             return 'failure'
         
     def BranchWithdraw(self, money):
+        '''
+        Withdraw interface
+        '''
         try:
             self.balance = int(self.balance) - int(money)
             return 'success'
@@ -74,6 +86,9 @@ class Branch(bank_pb2_grpc.BankServicer):
             return 'failure'
         
     def BranchPropogateWithdraw(self, money):
+        '''
+        PropagateWithdraw interface
+        '''
         global branch_objects
         for stub in self.stubList:
             interface, balance = 'propogate_withdraw', 0
@@ -81,6 +96,9 @@ class Branch(bank_pb2_grpc.BankServicer):
             stub.MsgDelivery(request)
 
     def BranchPropogateDeposit(self, money):
+        '''
+        PropagateDeposit interface
+        '''
         global branch_objects
         for stub in self.stubList:
             interface, balance = 'propogate_deposit', 0
@@ -88,6 +106,10 @@ class Branch(bank_pb2_grpc.BankServicer):
             stub.MsgDelivery(request)
 
 def serve(id, balance, stubList):
+    '''
+    initializes a branch server, also populates the stubList for branches.
+    code referred from : https://grpc.io/docs/languages/python/quickstart/
+    '''
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     port = str(consts.BASE_PORT+int(id))
     branch_obj = Branch(id=id, balance=balance, branches='1')
@@ -99,6 +121,10 @@ def serve(id, balance, stubList):
     server.wait_for_termination()
 
 def createStub(other_branch):
+    '''
+        generates and returns a client stub
+        code referred from : https://grpc.io/docs/languages/python/quickstart/
+    '''
     port = consts.BASE_PORT+int(other_branch.id)
     # print("port", port)
     channel = grpc.insecure_channel('localhost:{}'.format(port))
@@ -106,6 +132,9 @@ def createStub(other_branch):
     return stub
 
 def create_branch_subs():
+    '''
+    populates stub list for other branches
+    '''
     global branch_objects
     for i in range(len(branch_objects)):
         stub_list = []
@@ -117,6 +146,9 @@ def create_branch_subs():
         branch_objects[i].stubList = stub_list
 
 def initialize_branch_processes(branch_list):
+    '''
+    initiates branch processes
+    '''
     global branch_processes
     global branch_objects
     for branch in branch_list:
@@ -130,8 +162,10 @@ def initialize_branch_processes(branch_list):
     return
 
 def terminate_branch_processes():
+    '''
+    terminates branch processes
+    '''
     global branch_processes
     for proc in branch_processes:
-        # print("herere")
         proc.terminate()
 
