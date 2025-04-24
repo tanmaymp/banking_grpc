@@ -1,6 +1,6 @@
 Distributed Banking System Using gRPC
 
-Problem Statement
+Problem Statement:
 To design a distributed banking system which allows multiple customers to interact with bank branches enabling them to perform actions such as depositing, withdrawing, and checking their account balances. The primary objective.is to leverage gRPC to create interfaces which the system can utilize to execute customer requests while maintaining consistency of balance across the branches in the system.
 
 Key assumptions:
