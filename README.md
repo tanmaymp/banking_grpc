@@ -1,45 +1,76 @@
-# Distributed Banking System Using gRPC
+# Distributed Banking System Simulation
 
-## Problem Statement:
-To design a distributed banking system which allows multiple customers to interact with bank branches enabling them to perform actions such as depositing, withdrawing, and checking their account balances. The primary objective.is to leverage gRPC to create interfaces which the system can utilize to execute customer requests while maintaining consistency of balance across the branches in the system.
+This repository contains the implementation of a simulated distributed banking system, developed as part of the coursework in Distributed Systems at Arizona State University. The project was built incrementally across three phases, each exploring and implementing core concepts in distributed systems: remote communication, logical time, and client-centric consistency.
 
-## Key assumptions:
-1.	Every customer interacts exclusively with a specific branch in the system, and both the customer and the branch share a common identifier(ID).
-2.	All customers direct their transactions to a shared account within the bank, and the branch's balance is synonymous with the account balance. This underscores the critical requirement that any modification to the balance of any branch must be synchronized across all branches in the system.
-3.	No concurrent transactions occur on any branch. 
+## Project Motivation
 
-## Execution setup
-1.	Input file 
-The input file must be a valid json file and should be placed in the “test/” folder with the name “input.json”. If needed, the input file name can be changed but to ensure that the code reads it the value set for global variable INPUT_FILE in consts.py should be updated accordingly
+Distributed systems form the foundation of modern large-scale applications, enabling reliability, scalability, and fault tolerance. However, understanding their intricacies requires more than theoretical study. This project provides a practical approach to learning distributed systems by simulating a multi-branch banking environment where clients interact with geographically dispersed branches.
 
-2.	Output file
-The final output is stored in a text file “output.txt” which is generated in the same directory(./output.txt). If needed, the output file name can be changed as well by updating the global variable OUTPUT_FILE in consts.py accordingly.
+The aim was to explore the behavior and correctness of such a system under different distributed system constraints such as asynchronous communication, causal ordering of events, and consistency models.
 
-3.	Executing the system
-Once the input file is set, run the bank_main.py file to initiate the system. It would read the input file, process everything and generate the output.txt.
+## Project Overview
 
+### Phase I: Remote Communication with gRPC
 
-## Implementation Processes
+![Phase 1](images/phase1.png)
 
-### Interfaces
+The first phase establishes inter-process communication between customers and bank branches using **gRPC** in Python. The system supports basic banking operations such as querying balance, depositing, and withdrawing funds. To maintain state consistency across branches, transactions are propagated between branches using internal RPCs.
 
-Customer to Branch interfaces
+**Key components:**
+- External RPCs: `Query`, `Deposit`, `Withdraw`
+- Internal RPCs: `Propagate_Deposit`, `Propagate_Withdraw`
+- Python multiprocessing to parallelize customer and branch processes
 
-Query		  - used by customer processes to the check the current balance in the branch process.
-Deposit		- used by customer processes to deposit/increment balance in the branch process.
-Withdraw	- used by customer processes to withdraw/decrement balance from the branch.
+### Phase II: Logical Clocks and Causal Ordering
 
-Branch to Branch interfaces
+![Phase 2](images/phase2.png)
 
-PropagateDeposit	– used by branch processes to propagate the deposit to other branches of the         system to maintain consistency
-PropagateWithdraw	– used by branch processes to propagate the deposit to other branches of the system to maintain consistency
+The second phase introduces **Lamport’s Logical Clocks** to track and enforce the causal ordering of events across distributed processes. This ensures that the order of operations reflects the logical sequence of actions across customers and branches.
 
-## Code Implementation
+**Enhancements:**
+- Logical clock maintained per process (customer and branch)
+- Clock values embedded in request messages
+- Clock updates on send and receive operations as per Lamport’s algorithm
+- Event logging with timestamps to verify causal consistency
 
-| Operation           | Function                                      | Description                                                                 |
-|---------------------|-----------------------------------------------|-----------------------------------------------------------------------------|
-| Query               | `Branch.BranchQuery()`                        | Returns the current balance from `Branch.balance`                           |
-| Deposit             | `Branch.BranchDeposit(money)`                 | Increments `Branch.balance` by `money`                                      |
-| Withdraw            | `Branch.BranchWithdraw(money)`                | Decrements `Branch.balance` by `money`                                      |
-| Propagate Deposit   | `Branch.BranchPropagateDeposit(money)`        | Propagates deposit to all branches and increments their `Branch.balance`    |
-| Propagate Withdraw  | `Branch.BranchPropagateWithdraw(money)`       | Propagates withdraw to all branches and decrements their `Branch.balance`   |
+### Phase III: Read-Your-Writes Consistency
+
+![Phase 3](images/phase3.png)
+
+The final phase implements a **read-your-writes** consistency model to improve user experience in replicated systems. A customer should always observe their latest updates, even when interacting with a different branch from where the update was issued.
+
+**Mechanism:**
+- Per-customer `event_tracker` to track successful write operations
+- Per-branch tracker to store all propagated and local writes
+- Branches block customer reads until the customer's writes have been fully propagated
+- Synchronization check using matching `event_tracker` values before serving a read request
+
+## Implementation Details
+
+- The system is driven via a `main.py` controller which reads JSON input files and initiates customer and branch processes.
+- Service definitions are implemented in Protocol Buffers (`.proto` file), and compiled using `grpcio-tools`.
+- The system uses Python’s `multiprocessing` module for process creation and management.
+- Logging modules are used extensively for debugging, validation, and verification of distributed behavior.
+
+## Technologies Used
+
+- Python 3.10+
+- gRPC (`grpcio`, `grpcio-tools`)
+- Protocol Buffers
+- Multiprocessing (Python standard library)
+- Ubuntu 22.04 (development environment)
+
+## Testing
+
+A series of test input files were used to simulate banking operations. Each test case validates a specific aspect of the system, such as:
+- Balance consistency across branches
+- Causal ordering of transactions
+- Read-your-writes behavior under branch-switching scenarios
+
+Sample input files are located in the `tests/` directory.
+
+## Author
+
+**Tanmay Parulekar** 
+This was developed as part of graduate coursework at Arizona State University.  
+[GitHub](https://github.com).[LinkedIn](https://linkedin.com).
