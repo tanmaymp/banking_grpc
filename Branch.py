@@ -6,6 +6,7 @@ from concurrent import futures
 import consts
 import multiprocessing
 from time import sleep
+import logger
 
 branch_objects = []
 branch_processes = []
@@ -24,6 +25,10 @@ class Branch(bank_pb2_grpc.BankServicer):
         # a list of received messages used for debugging purpose
         self.recvMsg = list()
         # iterate the processID of the branches
+        # logical clock
+        self.logclock = 0
+        # event tracker
+        self.event_tracker = []
 
         # TODO: students are expected to store the processID of the branches
         pass
@@ -35,28 +40,50 @@ class Branch(bank_pb2_grpc.BankServicer):
         '''
         response = bank_pb2.BankResponse()
         response.interface = request.interface
+        response.branch_id = self.id
+        
+        #print("Logging..")
+        #print("interface = ", request.interface)
+        #print("ID = ", self.id)
+        #print("stub = ", request.id)
+        self.logclock = max(self.logclock, request.logclock) + 1
+        #logger.logfile('branch', request.interface, request.eventid, self.logclock, self.id, request.id, tag='R')
+        # Compute log clock
+
+        while(request.interface in ['query', 'deposit', 'withdraw'] and self.event_tracker != request.event_tracker):
+            #print("Blocking branch {} and waiting for propogartion".format(self.id))
+            sleep(1)
+
+        
         if request.type == 'customer':
             if request.interface == 'query':
                 response.balance = self.BranchQuery()
                 return response
             elif request.interface == 'deposit':
+                #print("Depositing")
                 response.result = self.BranchDeposit(request.money)
-                self.BranchPropogateDeposit(request.money)
+                self.event_tracker.append(request.eventid)
+                self.BranchPropogateDeposit(request)
                 return response
                 # response
             elif request.interface == 'withdraw':
                 response.result = self.BranchWithdraw(request.money)
-                self.BranchPropogateWithdraw(request.money)
+                self.event_tracker.append(request.eventid)
+                self.BranchPropogateWithdraw(request)
                 return response 
             else:
                 logging.error("Invalid interface defined for event")
         elif request.type == 'branch':
             if request.interface == 'propogate_deposit':
+                #print("Propagating Depositing")
                 self.BranchDeposit(request.money)
+                self.event_tracker.append(request.eventid)
             elif request.interface == 'propogate_withdraw':
                 self.BranchWithdraw(request.money)
+                self.event_tracker.append(request.eventid)
         else:
             logging.info("Invalid request type received")   
+        
         return response
 
     def BranchQuery(self):
@@ -85,25 +112,38 @@ class Branch(bank_pb2_grpc.BankServicer):
         except:
             return 'failure'
         
-    def BranchPropogateWithdraw(self, money):
+    def BranchPropogateWithdraw(self, request):
         '''
         PropagateWithdraw interface
         '''
         global branch_objects
+        #self.logclock = self.logclock + 1
         for stub in self.stubList:
             interface, balance = 'propogate_withdraw', 0
-            request = bank_pb2.BankRequest(id = int(self.id), type='branch', interface=interface, balance=balance, money=money)
-            stub.MsgDelivery(request)
+            self.logclock = self.logclock + 1
+            request = bank_pb2.BankRequest(id = int(self.id), eventid=request.eventid, type='branch', interface=interface, balance=balance, money=request.money, logclock=self.logclock, event_tracker=self.event_tracker)
+            #print("propagating from ", self.id, "to ", stub['branch'])
+            
+            stub["stub"].MsgDelivery(request)
+            #logger.logfile('branch', interface, request.eventid, self.logclock, request.id, stub=stub['branch'], tag='S')
 
-    def BranchPropogateDeposit(self, money):
+    def BranchPropogateDeposit(self, request):
         '''
         PropagateDeposit interface
         '''
+        #print("Propagated!!")
         global branch_objects
+        #self.logclock = self.logclock + 1
         for stub in self.stubList:
+            #print("in loop")
             interface, balance = 'propogate_deposit', 0
-            request = bank_pb2.BankRequest(id = int(self.id), type='branch', interface=interface, balance=balance, money=money)
-            stub.MsgDelivery(request)
+            self.logclock = self.logclock + 1
+            request = bank_pb2.BankRequest(id = int(self.id), eventid=request.eventid, type='branch', interface=interface, balance=balance, money=request.money, logclock=self.logclock, event_tracker=self.event_tracker)
+            #print("propagating from ", self.id, "to ", stub['branch'])
+            
+            stub["stub"].MsgDelivery(request)
+            #print("Propagated!!")
+            #logger.logfile('branch', interface, request.eventid, self.logclock, request.id, stub=stub['branch'], tag='S')
 
 def serve(id, balance, stubList):
     '''
@@ -142,8 +182,10 @@ def create_branch_subs():
             if i == j:
                 continue
             branch_stub = createStub(branch_objects[j])
-            stub_list.append(branch_stub)
+            #print("stublist1", branch_stub)
+            stub_list.append({"branch":j+1, "stub":branch_stub})
         branch_objects[i].stubList = stub_list
+        #print("stublist", branch_objects[i].stubList)
 
 def initialize_branch_processes(branch_list):
     '''
@@ -158,7 +200,7 @@ def initialize_branch_processes(branch_list):
         branch_process = multiprocessing.Process(target=serve, args=(branch.id, branch.balance, branch.stubList))
         branch_processes.append(branch_process)
         branch_process.start()
-    sleep(3)
+    sleep(5)
     return
 
 def terminate_branch_processes():
@@ -168,4 +210,5 @@ def terminate_branch_processes():
     global branch_processes
     for proc in branch_processes:
         proc.terminate()
+
 
