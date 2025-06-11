@@ -69,8 +69,18 @@ A series of test input files were used to simulate banking operations. Each test
 
 Sample input files are located in the `tests/` directory.
 
+## References
+
+1. A. S. Tanenbaum and M. Van Steen, *Distributed Systems: Principles and Paradigms*, 2nd ed., Pearson, 2007.  
+2. gRPC, “Core concepts, architecture and lifecycle.” [https://grpc.io/docs/what-is-grpc/core-concepts/](https://grpc.io/docs/what-is-grpc/core-concepts/)  
+3. L. Lamport, “Time, clocks, and the ordering of events in a distributed system,” *Communications of the ACM*, vol. 21, no. 7, pp. 558–565, 1978.  
+4. W. Vogels, “Eventually consistent,” *Communications of the ACM*, vol. 52, no. 1, pp. 40–44, 2009.  
+5. gRPC Python Quickstart. [https://grpc.io/docs/languages/python/quickstart/](https://grpc.io/docs/languages/python/quickstart/)  
+6. Protocol Buffers Language Guide. [https://protobuf.dev/programming-guides/proto3/](https://protobuf.dev/programming-guides/proto3/)
+
 ## Author
 
 **Tanmay Parulekar** 
-This was developed as part of graduate coursework at Arizona State University.  
-[GitHub](https://github.com).[LinkedIn](https://linkedin.com).
+- Note : This was developed as part of graduate coursework at Arizona State University.
+
+[LinkedIn](https://www.linkedin.com/in/tanmay-parulekar) • [GitHub](https://github.com/tanmaymp)
