@@ -1,3 +1,10 @@
 BASE_PORT = 50050
-INPUT_FILE = 'tests/input.json'
-OUTPUT_FILE = 'output.txt'
+INPUT_FILE = 'tests/input_big.json'
+OUTPUT_FILE = 'output.json'
+OUTPUT_FILE_temp = 'output_temp.txt'
+OUTPUT_FILE_customer = 'customer_events.json'
+OUTPUT_FILE_branch = 'branch_events.json'
+OUTPUT_FILE_events = 'events.json'
+cust_out = []
+branch_out = []
+events_out = []

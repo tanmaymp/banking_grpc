@@ -13,17 +13,17 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\nbank.proto\x12\x04\x62\x61nk\"Z\n\x0b\x42\x61nkRequest\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x0c\n\x04type\x18\x02 \x01(\t\x12\x11\n\tinterface\x18\x03 \x01(\t\x12\r\n\x05money\x18\x04 \x01(\x05\x12\x0f\n\x07\x62\x61lance\x18\x05 \x01(\x05\"B\n\x0c\x42\x61nkResponse\x12\x11\n\tinterface\x18\x02 \x01(\t\x12\x0e\n\x06result\x18\x03 \x01(\t\x12\x0f\n\x07\x62\x61lance\x18\x04 \x01(\x05\x32<\n\x04\x42\x61nk\x12\x34\n\x0bMsgDelivery\x12\x11.bank.BankRequest\x1a\x12.bank.BankResponseb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\nbank.proto\x12\x04\x62\x61nk\"\x94\x01\n\x0b\x42\x61nkRequest\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x0f\n\x07\x65ventid\x18\x02 \x01(\x05\x12\x0c\n\x04type\x18\x03 \x01(\t\x12\x11\n\tinterface\x18\x04 \x01(\t\x12\r\n\x05money\x18\x05 \x01(\x05\x12\x0f\n\x07\x62\x61lance\x18\x06 \x01(\x05\x12\x10\n\x08logclock\x18\x07 \x01(\x05\x12\x15\n\revent_tracker\x18\x08 \x03(\x05\"g\n\x0c\x42\x61nkResponse\x12\x11\n\tinterface\x18\x02 \x01(\t\x12\x0e\n\x06result\x18\x03 \x01(\t\x12\x0f\n\x07\x62\x61lance\x18\x04 \x01(\x05\x12\x10\n\x08logclock\x18\x05 \x01(\x05\x12\x11\n\tbranch_id\x18\x06 \x01(\x05\x32<\n\x04\x42\x61nk\x12\x34\n\x0bMsgDelivery\x12\x11.bank.BankRequest\x1a\x12.bank.BankResponseb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'bank_pb2', _globals)
 if _descriptor._USE_C_DESCRIPTORS == False:
   DESCRIPTOR._options = None
-  _globals['_BANKREQUEST']._serialized_start=20
-  _globals['_BANKREQUEST']._serialized_end=110
-  _globals['_BANKRESPONSE']._serialized_start=112
-  _globals['_BANKRESPONSE']._serialized_end=178
-  _globals['_BANK']._serialized_start=180
-  _globals['_BANK']._serialized_end=240
+  _globals['_BANKREQUEST']._serialized_start=21
+  _globals['_BANKREQUEST']._serialized_end=169
+  _globals['_BANKRESPONSE']._serialized_start=171
+  _globals['_BANKRESPONSE']._serialized_end=274
+  _globals['_BANK']._serialized_start=276
+  _globals['_BANK']._serialized_end=336
 # @@protoc_insertion_point(module_scope)

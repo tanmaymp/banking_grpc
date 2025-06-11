@@ -9,14 +9,19 @@ service Bank{
 
 message BankRequest{
     int32 id = 1;
-    string type = 2;
-    string interface = 3;
-    int32 money = 4;
-    int32 balance = 5;
+    int32 eventid = 2;
+    string type = 3;
+    string interface = 4;
+    int32 money = 5;
+    int32 balance = 6;
+    int32 logclock = 7;
+    repeated int32 event_tracker = 8;
 }
 
 message BankResponse{
     string interface = 2;
     string result = 3;
     int32 balance =4;
+    int32 logclock = 5;
+    int32 branch_id = 6;
 }
